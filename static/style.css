@@ -1,0 +1,90 @@
+/* Estilos generales */
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+/* Estilos para el navbar */
+.navbar {
+    background-color: #6f42c1; /* Color morado */
+}
+
+.navbar-brand, .nav-link {
+    color: #ffffff !important;
+}
+
+/* Estilos para el formulario */
+.form-label {
+    font-weight: bold;
+    color: #555;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.btn-primary {
+    background-color: #6f42c1; /* Color morado */
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #5e35b1; /* Color morado más oscuro */
+}
+
+/* Estilos para el log de respuestas */
+#log {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+    max-height: 600px;
+    overflow-y: auto;
+    height: 600px; /* Aumenta el tamaño de la caja de logs */
+}
+
+#response-log {
+    margin-top: 10px;
+}
+
+.message {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    word-wrap: break-word;
+}
+
+.message.user {
+    background-color: #e2f0ff;
+    color: #004085;
+    text-align: right;
+}
+
+.message.other {
+    background-color: #d4edda;
+    color: #155724;
+    text-align: left;
+}
