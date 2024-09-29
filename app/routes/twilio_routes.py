@@ -11,8 +11,6 @@ def configure_twilio_routes(app):
         message_body = request.form.get('Body')
         from_number = request.form.get('From')
 
-        print(f"API: {message_body} || From: {from_number}")
-
         # Generar la respuesta usando OpenAIService
         response = openai_service.generate_response(message_body, from_number)
 
