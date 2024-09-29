@@ -29,7 +29,7 @@ class SystemMessageService:
             nombre = contacto.nombre if contacto else None
 
             # Preparar los mensajes con el historial de conversaciones y el nombre del usuario
-            messages = preparar_mensajes(user_id, nombre, self.nombre_service)
+            messages = preparar_mensajes(user_id, nombre, self.nombre_service, contacto, prompt)
 
             # Buscar fragmentos relevantes en ChromaDB
             relevant_info = buscar_fragmentos_relevantes(prompt)

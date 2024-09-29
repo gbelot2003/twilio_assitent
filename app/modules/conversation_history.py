@@ -3,7 +3,7 @@
 from app.services.conversaciones_service import ConversacionService
 from app.services.contacto_service import ContactoService
 
-def preparar_mensajes(user_id, nombre=None, nombre_service=None):
+def preparar_mensajes(user_id, nombre=None, nombre_service=None, contacto=None, prompt=None):
     # Recuperar el historial de conversaciones del usuario
     chat_history = ConversacionService.obtener_conversaciones_por_user_id(user_id)
 
@@ -20,11 +20,12 @@ def preparar_mensajes(user_id, nombre=None, nombre_service=None):
         messages.append({"role": "system", "content": f"El usuario se llama {nombre}."})
     else:
         # Si no tiene nombre, intentar extraerlo del prompt
-        if nombre_service:
+        if nombre_service and prompt:
             nombre_detectado = nombre_service.detectar_y_almacenar_nombre(prompt)
             if nombre_detectado:
                 messages.append({"role": "system", "content": f"El usuario se llama {nombre_detectado}."})
                 # Actualizar el contacto con el nombre detectado
-                ContactoService.actualizar_contacto(contacto.id, nombre=nombre_detectado)
+                if contacto:
+                    ContactoService.actualizar_contacto(contacto.id, nombre=nombre_detectado)
 
     return messages
