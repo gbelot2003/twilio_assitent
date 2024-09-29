@@ -1,3 +1,5 @@
+# main.py
+
 from flask import Flask
 from flask_socketio import SocketIO
 from app.routes.routes import configure_routes

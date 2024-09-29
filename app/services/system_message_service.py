@@ -1,3 +1,5 @@
+# app/services/system_message_service.py
+
 from openai import OpenAI
 from dotenv import load_dotenv
 from app.services.contacto_service import ContactoService
@@ -44,3 +46,5 @@ class SystemMessageService:
             return False
         else:
             return True
+        
+        

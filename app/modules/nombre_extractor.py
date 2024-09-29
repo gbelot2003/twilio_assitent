@@ -1,3 +1,5 @@
+# app/modules/nombre_extractor.py
+
 import re
 
 class NombreExtractor:
@@ -37,3 +39,5 @@ class NombreExtractor:
             if resultado:
                 return resultado[0].capitalize()  # Retorna el primer nombre encontrado y lo capitaliza
         return None  # Si no encuentra un nombre, retorna None
+    
+    

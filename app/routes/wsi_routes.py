@@ -1,3 +1,5 @@
+# app/routes/wsi_routes.py
+
 import os
 import requests
 from dotenv import load_dotenv
@@ -44,3 +46,6 @@ def configure_wsi_routes(app):
             return jsonify({"status": "success", "response": response_data})
         except Exception as e:
             return jsonify({"status": "error", "response": str(e)})
+        
+
+        

@@ -1,3 +1,5 @@
+# app/services/openai_service.py
+
 import os
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -32,3 +34,5 @@ class OpenAIService:
         conversation = Conversacion(user_message=prompt, bot_response=respuesta_modelo, user_id=user_id)
         db.session.add(conversation)
         db.session.commit()
+
+        

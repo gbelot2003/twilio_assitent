@@ -1,3 +1,5 @@
+# app/services/contacto_service.py
+
 from extensions import db
 from app.models.contacto_model import Contacto
 
@@ -39,3 +41,5 @@ class ContactoService:
             db.session.delete(contacto)
             db.session.commit()
         return contacto
+    
+    

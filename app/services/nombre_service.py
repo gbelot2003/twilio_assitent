@@ -15,3 +15,5 @@ class NombreService:
             self.user_info_service.set_nombre(nombre_detectado)
             return nombre_detectado
         return None
+    
+    

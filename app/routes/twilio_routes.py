@@ -1,3 +1,5 @@
+# app/routes/twilio_routes.py
+
 from flask import request, jsonify
 from app.services.openai_service import OpenAIService
 
@@ -16,3 +18,5 @@ def configure_twilio_routes(app):
 
         # Devolver la respuesta a Twilio
         return jsonify({"message": response})
+        
+        
