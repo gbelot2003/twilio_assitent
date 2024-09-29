@@ -22,6 +22,9 @@ class SystemMessageService:
         # Verificar si el usuario tiene un número de teléfono en la base de datos
         contacto = ContactoService.obtener_contacto_por_telefono(user_id)
 
+        # Inicializar la variable nombre
+        nombre = None
+
         if not contacto:
             # Si no existe, crear un nuevo contacto con el número de teléfono
             contacto = ContactoService.crear_contacto(telefono=user_id)
@@ -72,4 +75,3 @@ class SystemMessageService:
         ConversacionService.crear_conversacion(prompt, respuesta_modelo, user_id)
 
         return respuesta_modelo
-        
