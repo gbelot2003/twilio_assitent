@@ -19,7 +19,7 @@ class OpenAIService:
     def handle_request(self, prompt, user_id):
 
         # Manejador de mensajes
-        respuesta_modelo = self.system_message_service.handle_request(prompt)
+        respuesta_modelo = self.system_message_service.handle_request(prompt, user_id)
 
         # Guardar la conversación en la base de datos
         self.guardar_conversacion(prompt, user_id, respuesta_modelo)

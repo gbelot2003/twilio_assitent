@@ -1,5 +1,5 @@
 from extensions import db
-from app.models import Contacto
+from app.models.contacto_model import Contacto
 
 class ContactoService:
     @staticmethod
