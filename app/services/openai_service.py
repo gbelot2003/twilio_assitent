@@ -1,6 +1,8 @@
 import os
 from openai import OpenAI
 from dotenv import load_dotenv
+from app.models.conversacion_model import Conversacion
+from extensions import db
 
 # Inicializa la API de OpenAI
 load_dotenv(override=True)
@@ -10,10 +12,10 @@ class OpenAIService:
     def __init__(self): 
         pass
 
-    def generate_response(self, prompt):
-        return self.handle_request(prompt)
+    def generate_response(self, prompt, user_id):
+        return self.handle_request(prompt, user_id)
     
-    def handle_request(self, prompt):
+    def handle_request(self, prompt, user_id):
 
         print(f"Usuario: {prompt}")
 
@@ -31,4 +33,13 @@ class OpenAIService:
 
         print(f"GPT: {respuesta_modelo}")
 
+        # Guardar la conversación en la base de datos
+        self.guardar_conversacion(prompt, user_id, respuesta_modelo)
+
         return respuesta_modelo
+    
+    
+    def guardar_conversacion(self, prompt, user_id, respuesta_modelo):
+        conversation = Conversacion(user_message=prompt, bot_response=respuesta_modelo, user_id=user_id)
+        db.session.add(conversation)
+        db.session.commit()

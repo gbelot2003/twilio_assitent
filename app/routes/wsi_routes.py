@@ -2,6 +2,8 @@ import os
 import requests
 from dotenv import load_dotenv
 from flask import render_template, jsonify, request
+#from app.models.conversacion_model import Conversation
+from extensions import db
 
 load_dotenv(override=True)
 
@@ -38,6 +40,13 @@ def configure_wsi_routes(app):
         try:
             response = requests.post(target_url, data=simulated_twilio_post)
             response_data = response.json()  # Asegurarse de que la respuesta sea un JSON
+            print(f"response: {response_data}")
+
+            # Guardar la conversación en la base de datos
+            # conversation = Conversation(user_message=message, bot_response=response, user_id=user_id)
+            # db.session.add(conversation)
+            # db.session.commit()
+
             return jsonify({"status": "success", "response": response_data})
         except Exception as e:
             return jsonify({"status": "error", "response": str(e)})

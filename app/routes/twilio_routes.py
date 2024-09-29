@@ -13,8 +13,8 @@ def configure_twilio_routes(app):
 
         print(f"API: {message_body} || From: {from_number}")
 
-         # Generar respuesta utilizando los fragmentos relevantes
-        response = openai_service.generate_response(message_body)
+        # Generar la respuesta usando OpenAIService
+        response = openai_service.generate_response(message_body, from_number)
 
         # Devolver la respuesta a Twilio
         return jsonify({"message": response})
