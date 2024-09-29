@@ -3,12 +3,12 @@
 import os
 from openai import OpenAI
 from dotenv import load_dotenv
-from app.services.contacto_service import ContactoService
 from app.services.conversaciones_service import ConversacionService
 from app.services.nombre_service import NombreService
 from app.services.user_info_service import UserInfoService
 from app.modules.contact_verification import verificar_contacto
 from app.modules.chroma_search import buscar_fragmentos_relevantes
+from app.modules.conversation_history import preparar_mensajes
 
 # Inicializa la API de OpenAI
 load_dotenv(override=True)
@@ -28,31 +28,11 @@ class SystemMessageService:
             # Inicializar la variable nombre
             nombre = contacto.nombre if contacto else None
 
-            # Recuperar el historial de conversaciones del usuario
-            chat_history = ConversacionService.obtener_conversaciones_por_user_id(user_id)
-
-            # Crear la lista de mensajes para enviar a OpenAI
-            messages = []
-
-            # Agregar el historial de conversaciones al prompt
-            for conversacion in chat_history:
-                messages.append({"role": "user", "content": conversacion.user_message})
-                messages.append({"role": "assistant", "content": conversacion.bot_response})
-
-            # Si el contacto tiene un nombre, usarlo en la conversación
-            if nombre:
-                messages.append({"role": "system", "content": f"El usuario se llama {nombre}."})
-            else:
-                # Si no tiene nombre, intentar extraerlo del prompt
-                nombre_detectado = self.nombre_service.detectar_y_almacenar_nombre(prompt)
-                if nombre_detectado:
-                    messages.append({"role": "system", "content": f"El usuario se llama {nombre_detectado}."})
-                    # Actualizar el contacto con el nombre detectado
-                    ContactoService.actualizar_contacto(contacto.id, nombre=nombre_detectado)
+            # Preparar los mensajes con el historial de conversaciones y el nombre del usuario
+            messages = preparar_mensajes(user_id, nombre, self.nombre_service)
 
             # Buscar fragmentos relevantes en ChromaDB
             relevant_info = buscar_fragmentos_relevantes(prompt)
-            
             if relevant_info:
                 messages.append(relevant_info)
 
