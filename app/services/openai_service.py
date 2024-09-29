@@ -15,17 +15,8 @@ class OpenAIService:
 
         # Manejador de mensajes
         respuesta_modelo = self.system_message_service.handle_request(prompt, user_id)
-
-        # Guardar la conversación en la base de datos
-        self.guardar_conversacion(prompt, user_id, respuesta_modelo)
-
+        
         # Devolver la respuesta generada por el modelo
         return respuesta_modelo
     
     
-    def guardar_conversacion(self, prompt, user_id, respuesta_modelo):
-        conversation = Conversacion(user_message=prompt, bot_response=respuesta_modelo, user_id=user_id)
-        db.session.add(conversation)
-        db.session.commit()
-
-        
