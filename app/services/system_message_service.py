@@ -7,6 +7,8 @@ from app.services.contacto_service import ContactoService
 from app.services.conversaciones_service import ConversacionService
 from app.services.nombre_service import NombreService
 from app.services.user_info_service import UserInfoService
+from app.services.chromadb_service import search_in_chromadb
+from app.modules.embedding_processing import get_embedding_for_chunk
 
 # Inicializa la API de OpenAI
 load_dotenv(override=True)
@@ -57,6 +59,21 @@ class SystemMessageService:
                 messages.append({"role": "system", "content": f"El usuario se llama {nombre_detectado}."})
                 # Actualizar el contacto con el nombre detectado
                 ContactoService.actualizar_contacto(contacto.id, nombre=nombre_detectado)
+
+
+        # Buscar en ChromaDB los fragmentos más relevantes
+        query_embedding = get_embedding_for_chunk(prompt)
+        relevant_chunks = search_in_chromadb(query_embedding)
+
+        # Incluir los fragmentos relevantes en el prompt
+        if relevant_chunks:
+            relevant_info = "\n".join(relevant_chunks)
+            messages.append(
+                {
+                    "role": "system",
+                    "content": f"Información relevante:\n{relevant_info}",
+                }
+            )
 
         # Agregar el mensaje actual del usuario
         messages.append({"role": "user", "content": prompt})
