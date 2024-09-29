@@ -1,15 +1,8 @@
 # app/services/openai_service.py
 
-import os
-from openai import OpenAI
-from dotenv import load_dotenv
 from app.models.conversacion_model import Conversacion
 from app.services.system_message_service import SystemMessageService
 from extensions import db
-
-# Inicializa la API de OpenAI
-load_dotenv(override=True)
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 class OpenAIService:
     def __init__(self): 

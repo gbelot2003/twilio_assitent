@@ -2,7 +2,6 @@
 
 from openai import OpenAI
 from dotenv import load_dotenv
-from app.services.contacto_service import ContactoService
 import os
 
 
@@ -15,18 +14,9 @@ class SystemMessageService:
         print(f"Usuario: {prompt}")
 
         messages = []
-                
-        if not self.check_phone_user(user_id):
-            print("No se ha encontrado el usuario en la base de datos.")
-            messages.append(
-                {"role": "system", "content": "Saluda cortesmente al usuario y obtén su nombre de manera formal y natural."}
-            )        
-        else:
-            print("Tiene un contacto en la base de datos.")
-            messages.append({"role": "user", "content": prompt})
 
-      
-    
+        
+
         # Enviar los mensajes a la API de OpenAI
         response = client.chat.completions.create(
             model="gpt-3.5-turbo", messages=messages, max_tokens=450, temperature=0.1  # type: ignore
@@ -38,13 +28,6 @@ class SystemMessageService:
         print(f"GPT: {respuesta_modelo}")
 
         return respuesta_modelo
-    
-    def check_phone_user(self, user_id):
-        contacto = ContactoService.obtener_contacto_por_telefono(telefono=user_id)
 
-        if contacto is None:
-            return False
-        else:
-            return True
         
         
