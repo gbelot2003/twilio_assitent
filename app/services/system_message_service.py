@@ -3,12 +3,12 @@
 import os
 from openai import OpenAI
 from dotenv import load_dotenv
-from app.services.contacto_service import ContactoService
 from app.services.conversaciones_service import ConversacionService
 from app.services.nombre_service import NombreService
 from app.services.user_info_service import UserInfoService
-from app.services.chromadb_service import search_in_chromadb
-from app.modules.embedding_processing import get_embedding_for_chunk
+from app.modules.contact_verification import verificar_contacto
+from app.modules.chroma_search import buscar_fragmentos_relevantes
+from app.modules.conversation_history import preparar_mensajes
 
 # Inicializa la API de OpenAI
 load_dotenv(override=True)
@@ -19,76 +19,40 @@ class SystemMessageService:
         self.nombre_service = NombreService(UserInfoService())
 
     def handle_request(self, prompt, user_id):
-        print(f"Usuario: {prompt}")
+        try:
+            print(f"Usuario: {prompt}")
 
-        # Verificar si el usuario tiene un número de teléfono en la base de datos
-        contacto = ContactoService.obtener_contacto_por_telefono(user_id)
+            # Verificar si el usuario tiene un número de teléfono en la base de datos
+            contacto = verificar_contacto(user_id)
 
-        # Inicializar la variable nombre
-        nombre = None
+            # Inicializar la variable nombre
+            nombre = contacto.nombre if contacto else None
 
-        if not contacto:
-            # Si no existe, crear un nuevo contacto con el número de teléfono
-            contacto = ContactoService.crear_contacto(telefono=user_id)
-            print(f"Nuevo contacto creado: {contacto.telefono}")
-        else:
-            # Si existe, extraer la información del contacto
-            nombre = contacto.nombre
-            direccion = contacto.direccion
-            email = contacto.email
-            print(f"Contacto encontrado: {nombre}, {direccion}, {email}")
+            # Preparar los mensajes con el historial de conversaciones y el nombre del usuario
+            messages = preparar_mensajes(user_id, nombre, self.nombre_service, contacto, prompt)
 
-        # Recuperar el historial de conversaciones del usuario
-        chat_history = ConversacionService.obtener_conversaciones_por_user_id(user_id)
+            # Buscar fragmentos relevantes en ChromaDB
+            relevant_info = buscar_fragmentos_relevantes(prompt)
+            if relevant_info:
+                messages.append(relevant_info)
 
-        # Crear la lista de mensajes para enviar a OpenAI
-        messages = []
+            # Agregar el mensaje actual del usuario
+            messages.append({"role": "user", "content": prompt})
 
-        # Agregar el historial de conversaciones al prompt
-        for conversacion in chat_history:
-            messages.append({"role": "user", "content": conversacion.user_message})
-            messages.append({"role": "assistant", "content": conversacion.bot_response})
-
-        # Si el contacto tiene un nombre, usarlo en la conversación
-        if nombre:
-            messages.append({"role": "system", "content": f"El usuario se llama {nombre}."})
-        else:
-            # Si no tiene nombre, intentar extraerlo del prompt
-            nombre_detectado = self.nombre_service.detectar_y_almacenar_nombre(prompt)
-            if nombre_detectado:
-                messages.append({"role": "system", "content": f"El usuario se llama {nombre_detectado}."})
-                # Actualizar el contacto con el nombre detectado
-                ContactoService.actualizar_contacto(contacto.id, nombre=nombre_detectado)
-
-
-        # Buscar en ChromaDB los fragmentos más relevantes
-        query_embedding = get_embedding_for_chunk(prompt)
-        relevant_chunks = search_in_chromadb(query_embedding)
-
-        # Incluir los fragmentos relevantes en el prompt
-        if relevant_chunks:
-            relevant_info = "\n".join(relevant_chunks)
-            messages.append(
-                {
-                    "role": "system",
-                    "content": f"Información relevante:\n{relevant_info}",
-                }
+            # Enviar los mensajes a la API de OpenAI
+            response = client.chat.completions.create(
+                model="gpt-3.5-turbo", messages=messages, max_tokens=450, temperature=0.1  # type: ignore
             )
 
-        # Agregar el mensaje actual del usuario
-        messages.append({"role": "user", "content": prompt})
+            # Obtener la respuesta generada por el modelo
+            respuesta_modelo = response.choices[0].message.content.strip()  # type: ignore
 
-        # Enviar los mensajes a la API de OpenAI
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo", messages=messages, max_tokens=450, temperature=0.1  # type: ignore
-        )
+            print(f"GPT: {respuesta_modelo}")
 
-        # Obtener la respuesta generada por el modelo
-        respuesta_modelo = response.choices[0].message.content.strip()  # type: ignore
+            # Guardar la conversación en la base de datos
+            ConversacionService.crear_conversacion(prompt, respuesta_modelo, user_id)
 
-        print(f"GPT: {respuesta_modelo}")
-
-        # Guardar la conversación en la base de datos
-        ConversacionService.crear_conversacion(prompt, respuesta_modelo, user_id)
-
-        return respuesta_modelo
+            return respuesta_modelo
+        except Exception as e:
+            print(f"Error en handle_request: {e}")
+            return "Lo siento, ha ocurrido un error al procesar tu solicitud."
