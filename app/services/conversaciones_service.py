@@ -1,5 +1,7 @@
+# app/services/conversaciones_service.py
+
 from extensions import db
-from app.models import Conversacion
+from app.models.conversacion_model import Conversacion
 
 class ConversacionService:
     @staticmethod

@@ -1,4 +1,4 @@
-# app/config.py
+# config.py
 
 import os
 
