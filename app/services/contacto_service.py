@@ -5,7 +5,7 @@ from app.models.contacto_model import Contacto
 
 class ContactoService:
     @staticmethod
-    def crear_contacto(nombre, telefono, direccion=None, email=None):
+    def crear_contacto(telefono, nombre=None, direccion=None, email=None):
         nuevo_contacto = Contacto(nombre=nombre, telefono=telefono, direccion=direccion, email=email)
         db.session.add(nuevo_contacto)
         db.session.commit()
@@ -41,5 +41,4 @@ class ContactoService:
             db.session.delete(contacto)
             db.session.commit()
         return contacto
-    
     
