@@ -22,7 +22,7 @@ def configure_wsi_routes(app):
             "SmsSid": "SM12345678901234567890123456789012",
             "SmsStatus": "received",
             "Body": message_body,  # Utiliza la variable message_body definida previamente o asigna un mensaje manualmente
-            "To": "+14155552671",  # Número de tu cuenta Twilio para pruebas
+            "To": os.getenv("TWILIO_NUMBER"),  # Número de tu cuenta Twilio para pruebas
             "NumSegments": "1",
             "MessageSid": "SM12345678901234567890123456789012",
             "AccountSid": os.getenv("TWILIO_ACCOUNT_SID"),  # SID de cuenta simulado

@@ -7,7 +7,7 @@ def configure_twilio_routes(app):
     @app.route('/api/twilio', methods=['POST'])
     def twilio_webhook():
         
-        # Obtener el mensaje de Twilio
+        # Obtener datos desde mensajes de API
         message_body = request.form.get('Body')
         from_number = request.form.get('From')
 
