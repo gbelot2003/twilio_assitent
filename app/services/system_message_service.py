@@ -12,15 +12,19 @@ class SystemMessageService:
     def handle_request(self, prompt, user_id):
         print(f"Usuario: {prompt}")
 
-        if self.check_phone_user(user_id):
-            print("Tiene un contacto en la base de datos.")
-        else:
-            print("No se ha encontrado el usuario en la base de datos.")
-
         messages = []
+                
+        if not self.check_phone_user(user_id):
+            print("No se ha encontrado el usuario en la base de datos.")
+            messages.append(
+                {"role": "system", "content": "Saluda cortesmente al usuario y obtén su nombre de manera formal y natural."}
+            )        
+        else:
+            print("Tiene un contacto en la base de datos.")
+            messages.append({"role": "user", "content": prompt})
 
-        messages.append({"role": "user", "content": prompt})
-
+      
+    
         # Enviar los mensajes a la API de OpenAI
         response = client.chat.completions.create(
             model="gpt-3.5-turbo", messages=messages, max_tokens=450, temperature=0.1  # type: ignore
