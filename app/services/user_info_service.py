@@ -4,7 +4,17 @@ class UserInfoService:
     def __init__(self):
         self.nombre = None
         self.email = None
+        self.address = None
         # Otros datos que podrías querer manejar
+
+    def set_address(self, address):
+        self.address = address
+
+    def get_address(self):
+        return self.address
+
+    def tiene_address(self):
+        return self.address is not None
 
     def set_nombre(self, nombre):
         self.nombre = nombre
