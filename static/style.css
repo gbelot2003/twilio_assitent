@@ -1,90 +1,108 @@
-/* Estilos generales */
-body {
-    background-color: #f8f9fa;
-    font-family: Arial, sans-serif;
+/* styles.css */
+
+/* General */
+body, html {
+    height: 100%;
     margin: 0;
-    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-}
-
-h2 {
-    text-align: center;
-    color: #333;
-}
-
-/* Estilos para el navbar */
-.navbar {
+/* Asegurar visibilidad del Navbar */
+.navbar.bg-purple {
     background-color: #6f42c1; /* Color morado */
+    z-index: 10; /* Asegura que esté al frente */
+    position: relative; /* No se superpone con otros elementos */
 }
 
+/* Estilo para elementos del navbar */
 .navbar-brand, .nav-link {
     color: #ffffff !important;
 }
 
-/* Estilos para el formulario */
-.form-label {
-    font-weight: bold;
-    color: #555;
+.nav-link:hover {
+    color: #d1c4e9 !important; /* Color más claro al pasar el mouse */
 }
 
-.form-control {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+/* Contenedor principal del chat con mayor ancho */
+.chat-container {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background-size: cover;
+    background-position: center;
+    border: 1px solid #ddd;
+    padding-bottom: 10px;
 }
 
-.btn-primary {
-    background-color: #6f42c1; /* Color morado */
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+/* Barra superior de WhatsApp */
+.whatsapp-header {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.btn-primary:hover {
-    background-color: #5e35b1; /* Color morado más oscuro */
+/* Barra inferior de WhatsApp */
+.whatsapp-footer {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Estilos para el log de respuestas */
-#log {
-    background-color: #f9f9f9;
-    padding: 15px;
-    border-radius: 5px;
-    max-height: 600px;
-    overflow-y: auto;
-    height: 600px; /* Aumenta el tamaño de la caja de logs */
-}
-
-#response-log {
-    margin-top: 10px;
-}
-
-.message {
-    margin-bottom: 10px;
-    padding: 10px;
-    border-radius: 5px;
-    word-wrap: break-word;
-}
-
-.message.user {
-    background-color: #e2f0ff;
-    color: #004085;
-    text-align: right;
-}
-
-.message.other {
-    background-color: #d4edda;
-    color: #155724;
+/* Mensajes de usuario */
+.user-bubble {
+    max-width: 70%; /* Ancho ajustado */
+    margin-left: auto;
+    background-color: #dcf8c6;
+    color: #000;
+    border-bottom-right-radius: 0;
+    border-radius: 8px;
+    position: relative;
+    padding: 10px 15px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.06);
     text-align: left;
+}
+
+/* Mensajes de otros */
+.other-bubble {
+    max-width: 70%; /* Ancho ajustado */
+    background-color: #fff;
+    color: #000;
+    border-bottom-left-radius: 0;
+    border-radius: 8px;
+    position: relative;
+    padding: 10px 15px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.06);
+    text-align: left;
+}
+
+/* Estilos para la hora de los mensajes */
+.message-time {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-size: 0.8em;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* Icono de estado de mensaje */
+.bi-check-lg,
+.bi-check2-all {
+    margin-left: 5px;
+    vertical-align: middle;
+}
+
+/* Animación de entrada de mensajes */
+.message {
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
